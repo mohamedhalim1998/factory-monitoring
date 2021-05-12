@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:math';
 
 import 'package:factory_monitor/data/data_provider.dart';
 import 'package:factory_monitor/data/model/sensor_data.dart';
@@ -14,6 +11,8 @@ class Sensors extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dataProvider = context.watch<DataProvider>();
+    print(dataProvider);
+    // dataProvider.connectToSocket();
     return Scaffold(
       appBar: AppBar(
         title: Text('Factory Monitor'),
@@ -36,12 +35,13 @@ class Sensors extends StatelessWidget {
     );
   }
 
-  List<Widget> buildSensorsData(List<String> data) {
+  List<Widget> buildSensorsData(List<dynamic> data) {
+    print(data);
     return List.generate(
       data.length,
       (index) {
         print(data[index]);
-        var sensor = Sensor.fromMap(jsonDecode(data[index]));
+        var sensor = Sensor.fromMap(data[index]);
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

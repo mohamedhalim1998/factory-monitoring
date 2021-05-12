@@ -2,6 +2,7 @@
     package="com.mohamed.halim.essa.factory_monitor">
    <application
         android:label="factory_monitor"
+       android:networkSecurityConfig="@xml/network_security_config"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

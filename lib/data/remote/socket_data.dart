@@ -1,33 +1,31 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
-import 'dart:math';
+import 'package:socket_io_client/socket_io_client.dart';
 
-import 'package:factory_monitor/data/model/sensor_data.dart';
-import 'package:flutter/widgets.dart';
 
 class SocketData {
-  final _socketStream = StreamController<List<String>>();
+  final _socketStream = StreamController<List<dynamic>>();
 
-  void addResponse(List<String> s) => _socketStream.sink.add(s);
+  void addResponse(List<dynamic> s) => _socketStream.sink.add(s);
 
-  Stream<List<String>> get getResponse => _socketStream.stream;
+  Stream<List<dynamic>> get getResponse => _socketStream.stream;
 
 
   void dispose() {
     _socketStream.close();
   }
-
-  void generateFakeData() {
-    final random = new Random();
-    List<String> l = List.generate(5, (index) {
-      Sensor s = Sensor('Device' + index.toString(), random.nextDouble() % 50,
-          random.nextDouble() % 50, DateTime.now().millisecondsSinceEpoch, 0);
-      return jsonEncode(s.toMap());
+  void connectToSocket() {
+    Socket socket = io('http://192.168.1.2:12345',
+        OptionBuilder().setTransports(['websocket']).build());
+    print('connecting');
+    socket.onConnect((_) {
+      print('connect');
     });
-    addResponse(l);
-    print('$l');
-    sleep(Duration(seconds: 5));
+    socket.on('sensor_data', (data) {
+      print(data);
+      addResponse(jsonDecode(data)['data']);
+    });
+    socket.onDisconnect((_) => print('disconnect'));
   }
 }

@@ -20,3 +20,4 @@ while(1):
             'time':  int(time.time() * 1000),
         })
     sio.emit("sensor_data", json.dumps({'data': list}))
+    time.sleep(1)

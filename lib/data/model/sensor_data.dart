@@ -10,8 +10,8 @@ class Sensor {
 
   Sensor.fromMap(Map<String, dynamic> map) {
     this.sensorId = map['sensorId'];
-    this.temperature = map['temperature'];
-    this.vibration = map['vibration'];
+    this.temperature = map['temperature'].toDouble();
+    this.vibration = map['vibration'].toDouble();
     this.time = map['time'];
     this.color = map['color'];
   }
