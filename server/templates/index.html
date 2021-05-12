@@ -1,0 +1,76 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket-Test</title>
+    <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      $(document).ready(function () {
+        var socket = io("192.168.1.2:12345");
+
+        socket.on("connect", function () {
+          console.log("Connecting");
+          socket.emit("sensor_data", {
+            data: "connected to the SocketServer...",
+          });
+        });
+
+        socket.on("sensor_data", function (msg, cb) {
+          console.log(msg.data);
+          $("#log").append(
+            "<br>" +
+              $("<div/>")
+                .text(
+                  JSON.stringify(msg.data)
+                  // "Sensor " +
+                  //   msg.sensorId +
+                  //   " (Temperature: " +
+                  //   msg.temperature +
+                  //   ", Vibration:  " +
+                  //   msg.vibration +
+                  //   ", time: " +
+                  //   msg.time +
+                  //   ")"
+                )
+                .html()
+          );
+          if (cb) cb();
+        });
+        $("form#emit").submit(function (event) {
+          socket.emit("sensor_data", {
+            data: {
+              temperature: $("#temperature").val(),
+              sensorId: $("#sensorId").val(),
+              vibration: $("#vibration").val(),
+              time: Date.now(),
+            },
+          });
+          return false;
+        });
+      });
+    </script>
+  </head>
+  <body style="background-color: white">
+    <h1 style="background-color: white">Socket</h1>
+    <!-- <form id="emit" method="POST" action="#">
+      <input type="text" name="sensorId" id="sensorId" placeholder="sensorId" />
+      <input
+        type="text"
+        name="temperature"
+        id="temperature"
+        placeholder="temperature"
+      />
+      <input
+        type="text"
+        name="vibration"
+        id="vibration"
+        placeholder="vibration"
+      />
+      <input type="submit" value="Send Data" />
+    </form> -->
+    <h2 style="background-color: white">Logs</h2>
+    <div id="log"></div>
+  </body>
+</html>
