@@ -1,38 +1,58 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:factory_monitor/data/data_provider.dart';
+import 'package:factory_monitor/data/model/sensor_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
 class Sensors extends StatelessWidget {
   static const String ROUTE_ID = "sensors-screen";
-  final random = new Random();
 
   @override
   Widget build(BuildContext context) {
+    final dataProvider = context.watch<DataProvider>();
     return Scaffold(
       appBar: AppBar(
         title: Text('Factory Monitor'),
       ),
       body: SafeArea(
-        child: GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(
-            10,
-            (index) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Device #$index"),
-                    Text("Temperature : " + random.nextInt(50).toString()),
-                    Text("Vibration Levels : " + random.nextInt(50).toString()),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
+        child: StreamBuilder(
+            stream: dataProvider.getLiveDataStream(),
+            builder: (context, snapshot) {
+              print("recv");
+              if (snapshot.data == null) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return GridView.count(
+                  crossAxisCount: 2,
+                  children: buildSensorsData(snapshot.data),
+                );
+              }
+            }),
       ),
+    );
+  }
+
+  List<Widget> buildSensorsData(List<String> data) {
+    return List.generate(
+      data.length,
+      (index) {
+        print(data[index]);
+        var sensor = Sensor.fromMap(jsonDecode(data[index]));
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(sensor.sensorId),
+              Text("Temperature : " + sensor.temperature.toString()),
+              Text("Vibration Levels : " + sensor.vibration.toString()),
+            ],
+          ),
+        );
+      },
     );
   }
 }

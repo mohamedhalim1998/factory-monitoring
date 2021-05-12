@@ -14,23 +14,20 @@ class SocketData {
 
   Stream<List<String>> get getResponse => _socketStream.stream;
 
-  SocketData() {
-    generateFakeData();
-  }
 
   void dispose() {
     _socketStream.close();
   }
 
-  void generateFakeData() async {
+  void generateFakeData() {
     final random = new Random();
-
     List<String> l = List.generate(5, (index) {
       Sensor s = Sensor('Device' + index.toString(), random.nextDouble() % 50,
           random.nextDouble() % 50, DateTime.now().millisecondsSinceEpoch, 0);
-      return jsonEncode(s);
+      return jsonEncode(s.toMap());
     });
     addResponse(l);
+    print('$l');
     sleep(Duration(seconds: 5));
   }
 }
