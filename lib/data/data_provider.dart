@@ -1,8 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:factory_monitor/data/model/sensor_data.dart';
 import 'package:factory_monitor/data/remote/socket_data.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 class DataProvider with ChangeNotifier {
   SocketData socketStream = SocketData();
@@ -11,7 +10,7 @@ class DataProvider with ChangeNotifier {
     socketStream.connectToSocket();
   }
 
-  Stream<List<dynamic>> getLiveDataStream() {
+  Stream<List<Sensor>> getLiveDataStream() {
     return socketStream.getResponse;
   }
 }

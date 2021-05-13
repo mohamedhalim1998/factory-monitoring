@@ -1,20 +1,29 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:factory_monitor/data/model/sensor_data.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-
 class SocketData {
-  final _socketStream = StreamController<List<dynamic>>();
+  final _socketStream = StreamController<List<Sensor>>();
 
-  void addResponse(List<dynamic> s) => _socketStream.sink.add(s);
+  void addResponse(List<dynamic> data) {
+    List<Sensor> sensors = List.generate(
+      data.length,
+      (index) {
+        print(data[index]);
+        return Sensor.fromMap(data[index]);
+      },
+    );
+    _socketStream.sink.add(sensors);
+  }
 
-  Stream<List<dynamic>> get getResponse => _socketStream.stream;
-
+  Stream<List<Sensor>> get getResponse => _socketStream.stream;
 
   void dispose() {
     _socketStream.close();
   }
+
   void connectToSocket() {
     Socket socket = io('http://192.168.1.2:12345',
         OptionBuilder().setTransports(['websocket']).build());

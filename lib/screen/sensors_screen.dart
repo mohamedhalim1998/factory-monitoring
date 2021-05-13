@@ -1,4 +1,3 @@
-
 import 'package:factory_monitor/data/data_provider.dart';
 import 'package:factory_monitor/data/model/sensor_data.dart';
 import 'package:flutter/material.dart';
@@ -35,21 +34,22 @@ class Sensors extends StatelessWidget {
     );
   }
 
-  List<Widget> buildSensorsData(List<dynamic> data) {
+  List<Widget> buildSensorsData(List<Sensor> data) {
     print(data);
     return List.generate(
       data.length,
       (index) {
-        print(data[index]);
-        var sensor = Sensor.fromMap(data[index]);
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(sensor.sensorId),
-              Text("Temperature : " + sensor.temperature.toString()),
-              Text("Vibration Levels : " + sensor.vibration.toString()),
-            ],
+        var sensor = data[index];
+        return Container(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(sensor.sensorId),
+                Text("Temperature : " + sensor.temperature.toString()),
+                Text("Vibration Levels : " + sensor.vibration.toString()),
+              ],
+            ),
           ),
         );
       },
