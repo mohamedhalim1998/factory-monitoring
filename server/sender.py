@@ -30,12 +30,19 @@ if __name__ == '__main__':
                 'vibration': random.randint(0, 100),
                 'time':  int(time.time() * 1000),
             }
-            if(sensor['temperature'] > 80 or sensor['vibration'] > 80):
-                sensor['dangerLevel'] = DANGEROUS
-            elif(sensor['temperature'] > 60 or sensor['vibration'] > 60):
-                sensor['dangerLevel'] = WARNING
+            if(sensor['temperature'] > 80):
+                sensor['temperatureDanger'] = DANGEROUS
+            elif(sensor['temperature'] > 60):
+                sensor['temperatureDanger'] = WARNING
             else:
-                sensor['dangerLevel'] = SAFE
+                sensor['temperatureDanger'] = SAFE
+
+            if(sensor['vibration'] > 80):
+                sensor['vibrationDanger'] = DANGEROUS
+            elif(sensor['vibration'] > 60):
+                sensor['vibrationDanger'] = WARNING
+            else:
+                sensor['vibrationDanger'] = SAFE
             list.append(sensor)
         print(list)
         try:

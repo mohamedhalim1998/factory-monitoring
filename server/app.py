@@ -19,10 +19,11 @@ class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True)
     temperature = db.Column(db.Float)
+    temperatureDanger = db.Column(db.Integer)
     sensorId = db.Column(db.String(50))
     vibration = db.Column(db.Float)
+    vibrationDanger = db.Column(db.Integer)
     time = db.Column(db.Integer)
-    dangerLevel = db.Column(db.Integer)
 
     def serialize(sensor):
         return {
@@ -30,7 +31,8 @@ class Sensor(db.Model):
             'sensorId': sensor.sensorId,
             'vibration': sensor.vibration,
             'time':  sensor.time,
-            'dangerLevel': sensor.dangerLevel
+            'temperatureDanger': sensor.temperatureDanger,
+            'vibrationDanger': sensor.vibrationDanger
         }
 
 
@@ -52,6 +54,7 @@ def sensor_read():
     else:
         return 'placeholder'
 
+
 @socket_.on('sensor_data')
 def test_sensor_data(message):
     list = json.loads(message)['data']
@@ -61,9 +64,14 @@ def test_sensor_data(message):
         temperature = map['temperature']
         vibration = map['vibration']
         time = map['time']
-        dangerLevel = map['dangerLevel']
-        sensor = Sensor(sensorId=sensorId, temperature=float(temperature),
-                        vibration=float(vibration), time=time, dangerLevel=dangerLevel)
+        temperatureDanger = map['temperatureDanger']
+        vibrationDanger = map['vibrationDanger']
+        sensor = Sensor(sensorId=sensorId,
+                        temperature=float(temperature),
+                        vibration=float(vibration),
+                        time=time,
+                        vibrationDanger=vibrationDanger,
+                        temperatureDanger=temperatureDanger)
         db.session.add(sensor)
 
     db.session.commit()

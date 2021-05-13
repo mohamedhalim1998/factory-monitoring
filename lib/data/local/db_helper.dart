@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static Database _database;
   String _table = 'sensor';
-  int _version = 2;
+  int _version = 3;
   static final DatabaseHelper instance = DatabaseHelper._constructor();
 
   DatabaseHelper._constructor();
@@ -44,6 +44,6 @@ class DatabaseHelper {
 
   void _createTable(Database db) {
     db.execute(
-        "CREATE TABLE $_table(id INTEGER PRIMARY KEY, sensorId TEXT, temperature REAL,vibration REAL, time INTEGER, dangerLevel INTEGER);");
+        "CREATE TABLE $_table(id INTEGER PRIMARY KEY, sensorId TEXT, temperature REAL,vibration REAL, time INTEGER, vibrationDanger INTEGER, temperatureDanger INTEGER);");
   }
 }
