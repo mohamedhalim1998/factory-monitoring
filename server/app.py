@@ -39,6 +39,19 @@ def index():
     return render_template('index.html', async_mode=socket_.async_mode)
 
 
+@app.route('/sensor-reads', methods=['GET', 'POST'])
+def sensor_read():
+    if(request.method == 'GET'):
+        s = request.args.get('sensorId', '')
+        print(s)
+        data = Sensor.query.filter_by(sensorId=s).all()
+        if(s == ''):
+            data = Sensor.query.all()
+        data = list(map(Sensor.serialize, data))
+        return jsonify(data)
+    else:
+        return 'placeholder'
+
 @socket_.on('sensor_data')
 def test_sensor_data(message):
     list = json.loads(message)['data']
