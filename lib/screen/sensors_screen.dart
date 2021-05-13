@@ -1,5 +1,7 @@
 import 'package:factory_monitor/data/data_provider.dart';
 import 'package:factory_monitor/data/model/sensor_data.dart';
+import 'package:factory_monitor/util/const.dart';
+import 'package:factory_monitor/widgets/sensor_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,7 @@ class Sensors extends StatelessWidget {
     print(dataProvider);
     // dataProvider.connectToSocket();
     return Scaffold(
+      backgroundColor: Color(0xfff4f4f4),
       appBar: AppBar(
         title: Text('Factory Monitor'),
       ),
@@ -22,11 +25,17 @@ class Sensors extends StatelessWidget {
             builder: (context, snapshot) {
               print("recv");
               if (snapshot.data == null) {
-                return Center(child: CircularProgressIndicator());
+                // return Center(child: CircularProgressIndicator());
+                return GridView.count(
+                  childAspectRatio: .8,
+                  crossAxisCount: 2,
+                  children: buildSensorsDataWidgets(kFakeTestData),
+                );
               } else {
                 return GridView.count(
+                  childAspectRatio: .8,
                   crossAxisCount: 2,
-                  children: buildSensorsData(snapshot.data),
+                  children: buildSensorsDataWidgets(snapshot.data),
                 );
               }
             }),
@@ -34,24 +43,12 @@ class Sensors extends StatelessWidget {
     );
   }
 
-  List<Widget> buildSensorsData(List<Sensor> data) {
+  List<Widget> buildSensorsDataWidgets(List<Sensor> data) {
     print(data);
     return List.generate(
       data.length,
       (index) {
-        var sensor = data[index];
-        return Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(sensor.sensorId),
-                Text("Temperature : " + sensor.temperature.toString()),
-                Text("Vibration Levels : " + sensor.vibration.toString()),
-              ],
-            ),
-          ),
-        );
+        return SensorCard(sensor: data[index]);
       },
     );
   }
