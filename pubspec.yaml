@@ -33,6 +33,8 @@ dependencies:
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
   font_awesome_flutter: ^9.0.0
   intl: ^0.17.0
+  http: ^0.13.3
+
 
 
 

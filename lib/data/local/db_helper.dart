@@ -26,8 +26,9 @@ class DatabaseHelper {
   }
 
   Future<void> insert(Sensor sensor) async {
+    print("inserting $sensor");
     Database db = await instance.database;
-    await db.insert(_table, sensor.toMap());
+    await db.insert(_table, sensor.toMap(), conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
   Future<List<Map<String, dynamic>>> getAllSensorData(String sensorId) async {
