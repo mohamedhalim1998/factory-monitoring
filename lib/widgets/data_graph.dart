@@ -72,26 +72,9 @@ class DataGraphState extends State<DataGraph> {
       gridData: FlGridData(show: false),
       titlesData: FlTitlesData(
         bottomTitles: SideTitles(
-          rotateAngle: 90.0,
-          showTitles: true,
-          reservedSize: 0,
-          getTextStyles: (value) => const TextStyle(
-            color: Color(0xff72719b),
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
-          margin: 10,
           getTitles: (value) => '',
         ),
         leftTitles: SideTitles(
-          showTitles: true,
-          getTextStyles: (value) => const TextStyle(
-            color: Color(0xff75729e),
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-          margin: 8,
-          reservedSize: 0,
           getTitles: (value) => '',
         ),
       ),
@@ -112,8 +95,8 @@ class DataGraphState extends State<DataGraph> {
           ),
         ),
       ),
-      minX: -5,
-      maxX: 110,
+      minX: 110,
+      maxX: -5,
       maxY: 100,
       minY: -10,
       lineBarsData: [
@@ -126,7 +109,7 @@ class DataGraphState extends State<DataGraph> {
   LineChartBarData linesBarData(List<FlSpot> data, Color color) {
     return LineChartBarData(
       spots: data,
-      isCurved: true,
+      isCurved: false,
       colors: [
         color,
       ],

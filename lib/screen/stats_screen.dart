@@ -22,36 +22,56 @@ class StatsScreen extends StatelessWidget {
       body: SafeArea(
         child: Container(
           padding: EdgeInsets.all(8),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                StreamBuilder(
-                  stream: dataProvider.getLiveDataStream(),
-                  builder: (context, snapshot) {
-                    print("recv");
-                    if (snapshot.data == null) {
-                      return getSensorData(kFakeTestData, sensorId);
-                    } else {
-                      return getSensorData(snapshot.data, sensorId);
-                    }
-                  },
-                ),
-                FutureBuilder(
-                    future: getData(dataProvider, sensorId),
-                    builder: (context, snapshot) {
-                      print(snapshot);
-                      if (snapshot.hasError) {
-                        print(snapshot.error);
-                      }
-                      if (snapshot.hasData) {
-                        print(snapshot.data);
-                        return DataGraph(reads: snapshot.data);
-                      } else {
-                        return Center(child: CircularProgressIndicator());
-                      }
-                    }),
-              ],
-            ),
+          child: StreamBuilder(
+            stream: dataProvider.getLiveDataStream(),
+            builder: (context, snapshot) {
+              print("recv");
+              if (snapshot.data == null) {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      getSensorData(kFakeTestData, sensorId),
+                      FutureBuilder(
+                          future: getData(dataProvider, sensorId),
+                          builder: (context, snapshot) {
+                            print(snapshot);
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                            }
+                            if (snapshot.hasData) {
+                              print(snapshot.data);
+                              return DataGraph(reads: snapshot.data);
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          }),
+                    ],
+                  ),
+                );
+              } else {
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      getSensorData(snapshot.data, sensorId),
+                      FutureBuilder(
+                          future: getData(dataProvider, sensorId),
+                          builder: (context, snapshot) {
+                            print(snapshot);
+                            if (snapshot.hasError) {
+                              print(snapshot.error);
+                            }
+                            if (snapshot.hasData) {
+                              print(snapshot.data);
+                              return DataGraph(reads: snapshot.data);
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          }),
+                    ],
+                  ),
+                );
+              }
+            },
           ),
         ),
       ),
