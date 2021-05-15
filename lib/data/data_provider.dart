@@ -25,4 +25,11 @@ class DataProvider with ChangeNotifier {
       database.insert(sensor);
     }
   }
+
+  Future<List<Sensor>> getLatestSensorData(String sensorId, int limit) async {
+    print("$sensorId , $limit");
+    var data = await database.getLatestSensorData(sensorId, limit);
+    print(data);
+    return data.map((e) => Sensor.fromMap(e)).toList();
+  }
 }

@@ -5,7 +5,7 @@ import 'package:factory_monitor/data/model/sensor_data.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class SocketData {
-  final _socketStream = StreamController<List<Sensor>>();
+  final _socketStream = StreamController<List<Sensor>>.broadcast();
 
   void addResponse(List<dynamic> data) {
     List<Sensor> sensors = List.generate(

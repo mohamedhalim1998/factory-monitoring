@@ -28,14 +28,30 @@ class DatabaseHelper {
   Future<void> insert(Sensor sensor) async {
     print("inserting $sensor");
     Database db = await instance.database;
-    await db.insert(_table, sensor.toMap(), conflictAlgorithm: ConflictAlgorithm.ignore);
+    await db.insert(_table, sensor.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore);
+  }
+
+  Future<List<Map<String, dynamic>>> getAlL(String sensorId) async {
+    Database db = await instance.database;
+    return (await db.query(_table));
   }
 
   Future<List<Map<String, dynamic>>> getAllSensorData(String sensorId) async {
     Database db = await instance.database;
 
+    return (await db
+        .query(_table, where: "sensorId = ?", whereArgs: [sensorId]));
+  }
+
+  Future<List<Map<String, dynamic>>> getLatestSensorData(
+      String sensorId, int limit) async {
+    Database db = await instance.database;
     return (await db.query(_table,
-        where: "sensorId = ?", whereArgs: [sensorId], limit: 100));
+        where: "sensorId = ?",
+        whereArgs: [sensorId],
+        orderBy: "time DESC",
+        limit: limit));
   }
 
   Future<int> delete(String id) async {
