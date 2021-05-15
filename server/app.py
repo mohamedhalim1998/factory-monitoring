@@ -45,10 +45,17 @@ def index():
 def sensor_read():
     if(request.method == 'GET'):
         s = request.args.get('sensorId', '')
-        print(s)
-        data = Sensor.query.filter_by(sensorId=s).all()
+        limit = request.args.get('limit', -1)
+
         if(s == ''):
-            data = Sensor.query.all()
+            data = Sensor.query.order_by(Sensor.time.desc())
+        else:
+            data = Sensor.query.filter_by(sensorId=s).order_by(Sensor.time.desc())
+        if(limit != -1):
+            data = data.limit(limit)
+        else:
+            data = data.all()
+
         data = list(map(Sensor.serialize, data))
         return jsonify(data)
     else:
