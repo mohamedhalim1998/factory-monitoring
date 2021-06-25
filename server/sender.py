@@ -10,7 +10,7 @@ DANGEROUS = 2
 
 
 sio = socketio.Client()
-sio.connect("http://192.168.1.2:12345")
+sio.connect("http://192.168.1.5:12345")
 print('conneced to sever session id', sio.sid)
 
 
@@ -25,9 +25,9 @@ if __name__ == '__main__':
         list = []
         for i in range(5):
             sensor = {
-                'temperature': random.randint(0, 100),
                 'sensorId': "Device #%d" % i,
-                'vibration': random.randint(0, 100),
+                'temperature': random.randint(40, 50),
+                'vibration': random.randint(40, 50),
                 'time':  int(time.time() * 1000),
             }
             if(sensor['temperature'] > 80):

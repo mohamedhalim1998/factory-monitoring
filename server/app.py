@@ -3,6 +3,12 @@ from flask_socketio import SocketIO, emit
 from threading import Lock
 from flask_sqlalchemy import SQLAlchemy
 import json
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import messaging
+SAFE = 0
+WARNING = 1
+DANGEROUS = 2
 
 async_mode = None
 app = Flask(__name__)
@@ -27,8 +33,8 @@ class Sensor(db.Model):
 
     def serialize(sensor):
         return {
-            'temperature': sensor.temperature,
             'sensorId': sensor.sensorId,
+            'temperature': sensor.temperature,
             'vibration': sensor.vibration,
             'time':  sensor.time,
             'temperatureDanger': sensor.temperatureDanger,
@@ -50,7 +56,8 @@ def sensor_read():
         if(s == ''):
             data = Sensor.query.order_by(Sensor.time.desc())
         else:
-            data = Sensor.query.filter_by(sensorId=s).order_by(Sensor.time.desc())
+            data = Sensor.query.filter_by(
+                sensorId=s).order_by(Sensor.time.desc())
         if(limit != -1):
             data = data.limit(limit)
         else:
@@ -61,9 +68,18 @@ def sensor_read():
     else:
         return 'placeholder'
 
+def notify(device):
+    msg = messaging.Message(notification=messaging.Notification(
+    title=device,
+    body="device is in dangrous state",),
+    topic='danger_notification')
+    response = messaging.send(msg)
+    # Response is a message ID string.
+    print('Successfully sent message:', response)
+
 
 @socket_.on('sensor_data')
-def test_sensor_data(message):
+def sensor_data_handler(message):
     list = json.loads(message)['data']
     for map in list:
         print(map)
@@ -73,6 +89,8 @@ def test_sensor_data(message):
         time = map['time']
         temperatureDanger = map['temperatureDanger']
         vibrationDanger = map['vibrationDanger']
+        if(vibrationDanger == DANGEROUS or temperatureDanger == DANGEROUS):
+            notify(sensorId)
         sensor = Sensor(sensorId=sensorId,
                         temperature=float(temperature),
                         vibration=float(vibration),
@@ -87,4 +105,6 @@ def test_sensor_data(message):
 
 if __name__ == '__main__':
     db.create_all()
+    cred = credentials.Certificate("serviceAccountKey.json")
+    firebase_admin.initialize_app(cred)
     socket_.run(app, host='0.0.0.0', port=12345, debug=True)

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "467560765150",
+    "project_id": "factory-monitoring-7f782",
+    "storage_bucket": "factory-monitoring-7f782.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467560765150:android:6ce966964f19dbb741944f",
+        "android_client_info": {
+          "package_name": "com.mohamed.halim.essa.factory_monitor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467560765150-m5srnh0s6llssrbn7kipqlg0hs0u0lnh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDJLJn3oEorVIqB8N-Tniuc1bTuXx50Yc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467560765150-m5srnh0s6llssrbn7kipqlg0hs0u0lnh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

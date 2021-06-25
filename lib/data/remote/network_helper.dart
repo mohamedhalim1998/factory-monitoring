@@ -8,7 +8,7 @@ class NetworkHelper {
   NetworkHelper._constructor();
   Future<List<Sensor>> fetchAll() async {
     final response =
-        await http.get(Uri.parse("http://192.168.1.2:12345/sensor-reads"));
+        await http.get(Uri.parse("http://192.168.1.5:12345/sensor-reads"));
     List<dynamic> data = jsonDecode(response.body);
     return List.generate(data.length, (index) => Sensor.fromMap(data[index]));
   }

@@ -36,7 +36,7 @@ class DataProvider with ChangeNotifier {
   }
 
   void connectToSocket() {
-    Socket socket = io('http://192.168.1.2:12345',
+    Socket socket = io('http://192.168.1.5:12345',
         OptionBuilder().setTransports(['websocket']).build());
     print('connecting');
     socket.onConnect((_) {

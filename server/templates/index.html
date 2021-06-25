@@ -8,47 +8,44 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script type="text/javascript" charset="utf-8">
       $(document).ready(function () {
-        var socket = io("192.168.1.2:12345");
+        var socket = io("192.168.1.5:12345");
 
         socket.on("connect", function () {
           console.log("Connecting");
-          socket.emit("sensor_data", {
-            data: "connected to the SocketServer...",
-          });
+          // socket.emit(
+          //   "sensor_data",
+          //   JSON.stringify({
+          //     data: "connected to the SocketServer...",
+          //   })
+          // );
         });
 
         socket.on("sensor_data", function (msg, cb) {
-          console.log(msg.data);
-          $("#log").append(
-            "<br>" +
-              $("<div/>")
-                .text(
-                  JSON.stringify(msg.data)
-                  // "Sensor " +
-                  //   msg.sensorId +
-                  //   " (Temperature: " +
-                  //   msg.temperature +
-                  //   ", Vibration:  " +
-                  //   msg.vibration +
-                  //   ", time: " +
-                  //   msg.time +
-                  //   ")"
-                )
-                .html()
-          );
-          if (cb) cb();
-        });
-        $("form#emit").submit(function (event) {
-          socket.emit("sensor_data", {
-            data: {
-              temperature: $("#temperature").val(),
-              sensorId: $("#sensorId").val(),
-              vibration: $("#vibration").val(),
-              time: Date.now(),
-            },
+          console.log(JSON.parse(msg).data);
+          s = "<br>";
+          JSON.parse(msg).data.forEach((element) => {
+            s += JSON.stringify(element) + "<br>";
           });
-          return false;
+          console.log(s);
+          $("#log").append(s).html();
         });
+        socket.on("danger_notification", function (msg, cb) {
+          console.log(msg);
+          $("#log")
+            .append("<br> danger from" + msg)
+            .html();
+        });
+        // $("form#emit").submit(function (event) {
+        //   socket.emit("sensor_data", {
+        //     data: {
+        //       temperature: $("#temperature").val(),
+        //       sensorId: $("#sensorId").val(),
+        //       vibration: $("#vibration").val(),
+        //       time: Date.now(),
+        //     },
+        //   });
+        //   return false;
+        // });
       });
     </script>
   </head>
