@@ -11,6 +11,13 @@ class DataProvider with ChangeNotifier {
   SocketData socketStream = SocketData();
   DatabaseHelper database = DatabaseHelper.instance;
   NetworkHelper networkHelper = NetworkHelper.instance;
+  String _searchQuery = "";
+
+  String get searchQuery => _searchQuery;
+
+  set searchQuery(String searchQuery) {
+    _searchQuery = searchQuery;
+  }
 
   DataProvider() {
     connectToSocket();
@@ -60,6 +67,11 @@ class DataProvider with ChangeNotifier {
     );
     for (Sensor sensor in sensors) {
       database.insert(sensor);
+    }
+    if (searchQuery != "") {
+      sensors = sensors
+          .where((element) => element.sensorId.contains(searchQuery))
+          .toList();
     }
     socketStream.addResponse(sensors);
   }

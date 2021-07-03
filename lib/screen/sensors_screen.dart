@@ -2,6 +2,7 @@ import 'package:factory_monitor/data/data_provider.dart';
 import 'package:factory_monitor/data/model/sensor_data.dart';
 import 'package:factory_monitor/util/const.dart';
 import 'package:factory_monitor/widgets/sensor_card.dart';
+import 'package:factory_monitor/widgets/serach_box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -16,9 +17,7 @@ class Sensors extends StatelessWidget {
     // dataProvider.connectToSocket();
     return Scaffold(
       backgroundColor: Color(0xfff4f4f4),
-      appBar: AppBar(
-        title: Text('Factory Monitor'),
-      ),
+      appBar: AppBar(title: SearchBox()),
       body: SafeArea(
         child: StreamBuilder(
             stream: dataProvider.getLiveDataStream(),
