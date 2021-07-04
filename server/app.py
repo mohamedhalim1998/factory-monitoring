@@ -48,6 +48,14 @@ def index():
     return render_template('index.html', async_mode=socket_.async_mode)
 
 
+@app.route('/update', methods=['POST'])
+def update():
+    if(request.method == 'POST'):
+        print(request.form.get('data'))
+        socket_.emit('sensor_data', request.form.get('data'))
+        return 'placeholder'
+
+
 @app.route('/sensor-reads', methods=['GET', 'POST'])
 def sensor_read():
     if(request.method == 'GET'):
