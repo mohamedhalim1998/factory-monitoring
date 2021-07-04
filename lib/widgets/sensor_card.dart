@@ -2,8 +2,8 @@ import 'package:factory_monitor/data/model/sensor_data.dart';
 import 'package:factory_monitor/screen/stats_screen.dart';
 import 'package:factory_monitor/util/const.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class SensorCard extends StatelessWidget {
   final Sensor sensor;
@@ -14,6 +14,7 @@ class SensorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tempColor = getDangerColor(sensor.temperatureDanger);
     final vibColor = getDangerColor(sensor.vibrationDanger);
+    final humidColor = getDangerColor(sensor.humidityDanger);
     return TextButton(
       onPressed: () => {
         Navigator.pushNamed(context, StatsScreen.ROUTE_ID,
@@ -34,8 +35,8 @@ class SensorCard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.thermometerHalf,
+                leading: Icon(
+                  WeatherIcons.thermometer,
                   color: tempColor,
                   size: 30,
                 ),
@@ -49,8 +50,8 @@ class SensorCard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.waveSquare,
+                leading: Icon(
+                  WeatherIcons.earthquake,
                   color: vibColor,
                   size: 30,
                 ),
@@ -64,8 +65,23 @@ class SensorCard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.clock,
+                leading: Icon(
+                  WeatherIcons.humidity,
+                  color: humidColor,
+                  size: 30,
+                ),
+                // title: Text("Humidity"),
+                title: Text(
+                  sensor.humidity.toString(),
+                  style: TextStyle(
+                    color: humidColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.timer,
                   size: 30,
                 ),
                 title: Text(

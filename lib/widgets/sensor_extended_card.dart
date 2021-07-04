@@ -3,6 +3,7 @@ import 'package:factory_monitor/util/const.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_icons/weather_icons.dart';
 
 class SensorExtendedCard extends StatelessWidget {
   final Sensor sensor;
@@ -13,6 +14,7 @@ class SensorExtendedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tempColor = getDangerColor(sensor.temperatureDanger);
     final vibColor = getDangerColor(sensor.vibrationDanger);
+    final humidColor = getDangerColor(sensor.humidityDanger);
     return Container(
       padding: const EdgeInsets.all(2.0),
       child: Card(
@@ -31,8 +33,8 @@ class SensorExtendedCard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.thermometerHalf,
+                leading: Icon(
+                  WeatherIcons.thermometer,
                   color: tempColor,
                   size: 30,
                 ),
@@ -52,8 +54,8 @@ class SensorExtendedCard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.waveSquare,
+                leading: Icon(
+                  WeatherIcons.earthquake,
                   color: vibColor,
                   size: 30,
                 ),
@@ -73,8 +75,29 @@ class SensorExtendedCard extends StatelessWidget {
                 ),
               ),
               ListTile(
-                leading: FaIcon(
-                  FontAwesomeIcons.clock,
+                leading: Icon(
+                  WeatherIcons.humidity,
+                  color: vibColor,
+                  size: 30,
+                ),
+                title: Text(
+                  "Humidity",
+                  style: TextStyle(
+                    color: humidColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                trailing: Text(
+                  sensor.vibration.toString(),
+                  style: TextStyle(
+                    color: vibColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.timer,
                   size: 30,
                 ),
                 title: Text(

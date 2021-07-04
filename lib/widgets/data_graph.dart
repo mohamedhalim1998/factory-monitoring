@@ -28,8 +28,8 @@ class DataGraphState extends State<DataGraph> {
           borderRadius: BorderRadius.all(Radius.circular(18)),
           gradient: LinearGradient(
             colors: [
-              Color(0xff2c274c),
-              Color(0xff46426c),
+              Color(0xFF194D19),
+              Color(0xFF6E2D2D),
             ],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
@@ -53,6 +53,7 @@ class DataGraphState extends State<DataGraph> {
             ColorLegend({
               "Temperture": Color(0xffaa4cfc),
               "Vibration": Color(0xff27b6fc),
+              "Humidity": Color(0xFF2760FC),
             })
           ],
         ),
@@ -100,8 +101,9 @@ class DataGraphState extends State<DataGraph> {
       maxY: 100,
       minY: -10,
       lineBarsData: [
-        linesBarData(getGraphTemp(), Color(0xffaa4cfc)),
+        linesBarData(getGraphTemp(), Color(0xFFBD7DF5)),
         linesBarData(getGraphVib(), Color(0xff27b6fc)),
+        linesBarData(getGraphHumid(), Color(0xE03A6EFC)),
       ],
     );
   }
@@ -132,5 +134,10 @@ class DataGraphState extends State<DataGraph> {
   List<FlSpot> getGraphVib() {
     return List.generate(100,
         (index) => FlSpot(index.toDouble(), widget.reads[index].vibration));
+  }
+
+  List<FlSpot> getGraphHumid() {
+    return List.generate(
+        100, (index) => FlSpot(index.toDouble(), widget.reads[index].humidity));
   }
 }

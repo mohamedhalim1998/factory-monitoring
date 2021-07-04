@@ -24,15 +24,15 @@ class Sensors extends StatelessWidget {
             builder: (context, snapshot) {
               print("recv");
               if (snapshot.data == null) {
-                return Center(child: CircularProgressIndicator());
-                // return GridView.count(
-                //   childAspectRatio: .8,
-                //   crossAxisCount: 2,
-                //   children: buildSensorsDataWidgets(kFakeTestData),
-                // );
+                // return Center(child: CircularProgressIndicator());
+                return GridView.count(
+                  childAspectRatio: .65,
+                  crossAxisCount: 2,
+                  children: buildSensorsDataWidgets(kFakeTestData),
+                );
               } else {
                 return GridView.count(
-                  childAspectRatio: .8,
+                  childAspectRatio: .65,
                   crossAxisCount: 2,
                   children: buildSensorsDataWidgets(snapshot.data),
                 );

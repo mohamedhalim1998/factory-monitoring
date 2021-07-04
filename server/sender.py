@@ -23,11 +23,12 @@ def disconnect():
 if __name__ == '__main__':
     while(1):
         list = []
-        for i in range(5):
+        for i in range(3):
             sensor = {
                 'sensorId': "Device #%d" % i,
-                'temperature': random.randint(40, 50),
-                'vibration': random.randint(40, 50),
+                'temperature': random.randint(30, 60),
+                'humidity': random.randint(20, 80),
+                'vibration': random.randint(0, 60),
                 'time':  int(time.time() * 1000),
             }
             if(sensor['temperature'] > 80):
@@ -43,10 +44,17 @@ if __name__ == '__main__':
                 sensor['vibrationDanger'] = WARNING
             else:
                 sensor['vibrationDanger'] = SAFE
+
+            if(sensor['humidity'] > 80):
+                sensor['humidityDanger'] = DANGEROUS
+            elif(sensor['humidity'] > 60):
+                sensor['humidityDanger'] = WARNING
+            else:
+                sensor['humidityDanger'] = SAFE
             list.append(sensor)
         print(list)
         try:
             sio.emit("sensor_data", json.dumps({'data': list}))
-            time.sleep(5)
+            time.sleep(1)
         except:
             exit()

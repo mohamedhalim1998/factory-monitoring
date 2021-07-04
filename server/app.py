@@ -1,6 +1,5 @@
 from flask import Flask, render_template, session, request, jsonify
 from flask_socketio import SocketIO, emit
-from threading import Lock
 from flask_sqlalchemy import SQLAlchemy
 import json
 import firebase_admin
@@ -17,18 +16,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 db = SQLAlchemy(app)
 socket_ = SocketIO(app, async_mode=async_mode)
-thread = None
-thread_lock = Lock()
 
 
 class Sensor(db.Model):
     id = db.Column(db.Integer, primary_key=True,
                    autoincrement=True)
+    sensorId = db.Column(db.String(50))
     temperature = db.Column(db.Float)
     temperatureDanger = db.Column(db.Integer)
-    sensorId = db.Column(db.String(50))
     vibration = db.Column(db.Float)
     vibrationDanger = db.Column(db.Integer)
+    humidity = db.Column(db.Float)
+    humidityDanger = db.Column(db.Integer)
     time = db.Column(db.Integer)
 
     def serialize(sensor):
@@ -36,9 +35,11 @@ class Sensor(db.Model):
             'sensorId': sensor.sensorId,
             'temperature': sensor.temperature,
             'vibration': sensor.vibration,
+            'humidity': sensor.humidity,
             'time':  sensor.time,
             'temperatureDanger': sensor.temperatureDanger,
-            'vibrationDanger': sensor.vibrationDanger
+            'vibrationDanger': sensor.vibrationDanger,
+            'humidityDanger': sensor.humidityDanger
         }
 
 
@@ -68,11 +69,12 @@ def sensor_read():
     else:
         return 'placeholder'
 
+
 def notify(device):
     msg = messaging.Message(notification=messaging.Notification(
-    title=device,
-    body="device is in dangrous state",),
-    topic='danger_notification')
+        title=device,
+        body="device is in dangrous state",),
+        topic='danger_notification')
     response = messaging.send(msg)
     # Response is a message ID string.
     print('Successfully sent message:', response)
@@ -86,19 +88,22 @@ def sensor_data_handler(message):
         sensorId = map['sensorId']
         temperature = map['temperature']
         vibration = map['vibration']
+        humidity = map['humidity']
         time = map['time']
         temperatureDanger = map['temperatureDanger']
         vibrationDanger = map['vibrationDanger']
-        if(vibrationDanger == DANGEROUS or temperatureDanger == DANGEROUS):
+        humidityDanger = map['humidityDanger']
+        if(vibrationDanger == DANGEROUS or temperatureDanger == DANGEROUS or humidityDanger == DANGEROUS):
             notify(sensorId)
         sensor = Sensor(sensorId=sensorId,
                         temperature=float(temperature),
                         vibration=float(vibration),
+                        humidity=float(humidity),
                         time=time,
                         vibrationDanger=vibrationDanger,
-                        temperatureDanger=temperatureDanger)
+                        temperatureDanger=temperatureDanger,
+                        humidityDanger=humidityDanger)
         db.session.add(sensor)
-
     db.session.commit()
     emit('sensor_data', message, broadcast=True)
 

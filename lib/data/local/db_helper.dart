@@ -60,7 +60,16 @@ class DatabaseHelper {
   }
 
   void _createTable(Database db) {
-    db.execute(
-        "CREATE TABLE $_table(id INTEGER PRIMARY KEY, sensorId TEXT, temperature REAL,vibration REAL, time INTEGER, vibrationDanger INTEGER, temperatureDanger INTEGER);");
+    db.execute("""
+                CREATE TABLE $_table
+                (id INTEGER PRIMARY KEY, 
+                sensorId TEXT, 
+                temperature REAL, 
+                vibration REAL, 
+                humidity REAL, 
+                time INTEGER, 
+                vibrationDanger INTEGER, 
+                temperatureDanger INTEGER, 
+                humidityDanger INTEGER);""");
   }
 }

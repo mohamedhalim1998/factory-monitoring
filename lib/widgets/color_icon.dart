@@ -16,7 +16,7 @@ class ColorIcon extends StatelessWidget {
           padding: const EdgeInsets.all(1.0),
           child: CircleAvatar(
             backgroundColor: color,
-            radius: 15,
+            radius: 10,
           ),
           decoration: new BoxDecoration(
             color: Colors.black45, // border color
@@ -25,7 +25,7 @@ class ColorIcon extends StatelessWidget {
         ),
         Text(
           title,
-          style: TextStyle(color: Colors.white60),
+          style: TextStyle(color: Colors.white60, fontSize: 12),
         )
       ],
     );
